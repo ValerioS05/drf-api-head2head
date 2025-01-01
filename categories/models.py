@@ -4,7 +4,7 @@ from cloudinary.models import CloudinaryField
 class Category(models.Model) :
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField()
-    image = models.ImageField(
+    image = CloudinaryField(
         'image',
         blank=True,
         null=True,
