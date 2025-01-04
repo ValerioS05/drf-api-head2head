@@ -2,14 +2,14 @@ from django.core.validators import MaxLengthValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
-from .models import Profile
-from .models import Category
+from categories.models import Category
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     description = models.TextField()
     price = models.DecimalField(
+        max_digits=10,
         decimal_places=2,
         validators=[MinValueValidator(0.01)]
         )   
@@ -26,11 +26,11 @@ class Product(models.Model):
     features = models.TextField(
         validators=[MaxLengthValidator(450)]
     )
-    created_at = models.DateField()
-    creator = models.ForeignKey(User)
-    
+    created_at = models.DateField(auto_now_add=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
     class Meta:
-        order = [
+        ordering = [
             'name',
             'location',
             '-category__name',
@@ -38,5 +38,5 @@ class Product(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.name}, {self.category} from {self.creator} ({self.price})'
+        return f'{self.name}, {self.category} from {self.owner} ({self.price})'
     
