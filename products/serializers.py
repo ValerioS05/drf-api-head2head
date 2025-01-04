@@ -19,7 +19,6 @@ class ProductSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'Image height must be smaller than 4096px.'
             )
-
     class Meta:
         model = Product
         fields = [
@@ -40,5 +39,3 @@ class ProductSerializer(serializers.ModelSerializer):
         if value <= 0:
             raise serializers.ValidationError('Price must be greater than 0.')
         return value
-    
-    
