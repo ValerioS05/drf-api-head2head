@@ -21,7 +21,11 @@ class ProductList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        serializer_class = ProductSerializer
+        if not request.user.is_staff:
+            return Response(
+                'You do not have permission to perform this action.',
+                status=status.HTTP_403_FORBIDDEN
+            )
         serializer = ProductSerializer(
             data=request.data,
             context={
@@ -42,10 +46,12 @@ class ProductList(APIView):
 
 class ProductDetail(APIView):
     permission_classes = [IsOwnerOrReadOnly]
+    serializer_class = ProductSerializer
     
     def get_product(self, pk):
         try:
             product = Product.objects.get(pk=pk)
+            self.check_object_permissions(self.request, product)
             return product
         except Product.DoesNotExist:
             raise Http404
