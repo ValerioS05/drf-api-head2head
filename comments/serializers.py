@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from .models import Comment
-from .moldels import Product
+from .models import Product
 
 class CommentSerializer(serializers.ModelSerializer):
-    product = serializers.ReadOnlyField(source='product.id')
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
     created_at = serializers.ReadOnlyField()
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
