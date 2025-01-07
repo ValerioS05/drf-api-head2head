@@ -1,91 +1,41 @@
-from django.http import Http404
-from rest_framework import status, permissions
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.db.models import Count
+from rest_framework import generics, permissions, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_api_head2head.permissions import IsOwnerOrReadOnly
 from .models import Product
 from .serializers import ProductSerializer
-from drf_api_head2head.permissions import IsOwnerOrReadOnly
 
-class ProductList(APIView):
+
+class ProductList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = ProductSerializer
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly
+    queryset = Product.objects.all()
+
+    filter_backends = [
+        filters.OrderingFilter,
+        filters.SearchFilter,
+        DjangoFilterBackend,
     ]
-    
-    def get(self, request):
-        products = Product.objects.all()
-        serializer = ProductSerializer(
-            products,
-            many=True,
-            context={'request': request})
-        return Response(serializer.data)
-
-    def post(self, request):
-        if not request.user.is_staff:
-            return Response(
-                'You do not have permission to perform this action.',
-                status=status.HTTP_403_FORBIDDEN
-            )
-        serializer = ProductSerializer(
-            data=request.data,
-            context={
-                'request' : request
-            }
-        )
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED
-            )
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    search_fields = [
+        'name',
+        'keywords',
+        'category',
+        'owner__username'
+    ]
+    ordering_fields = [
+        'name',
+        'price',
+        'created_at',
+    ]
+    filterset_fields = [
+        'category',
+        'price',
+    ]
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
-class ProductDetail(APIView):
+class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]
     serializer_class = ProductSerializer
-    
-    def get_product(self, pk):
-        try:
-            product = Product.objects.get(pk=pk)
-            self.check_object_permissions(self.request, product)
-            return product
-        except Product.DoesNotExist:
-            raise Http404
-    
-    def get(self, request, pk):
-        product = self.get_product(pk)
-        self.check_object_permissions(self.request, product)
-        serializer = ProductSerializer(
-            product,
-            context= {
-                'request' : request
-            }
-        )
-        return Response(serializer.data)
-    
-    def put(self, request, pk):
-        product = self.get_product(pk)
-        self.check_object_permissions(self.request, product)
-        serializer = ProductSerializer(
-            product,
-            data = request.data,
-            context = {
-                'request' : request
-            }
-        )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(
-            serializer.errors, status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def delete(self, request, pk):
-        product = self.get_product(pk)
-        self.check_object_permissions(self.request, product)
-        product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    queryset = Product.objects.all()
