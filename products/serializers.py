@@ -5,6 +5,7 @@ class ProductSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     created_at = serializers.ReadOnlyField()
     image = serializers.ReadOnlyField(source='owner.profile.image.url')
+    average_rating = serializers.SerializerMethodField()
     
     def validate_image(self, value):
         if value.size > 1024 * 1024 * 2:
@@ -33,9 +34,13 @@ class ProductSerializer(serializers.ModelSerializer):
             'features',
             'created_at',
             'owner',
+            'average_rating',
         ]
 
     def validate_price(self, value):
         if value <= 0:
             raise serializers.ValidationError('Price must be greater than 0.')
         return value
+
+    def get_average_rating(self, obj):
+        return obj.get_average_rating()

@@ -40,3 +40,8 @@ class Product(models.Model):
     def __str__(self):
         return f'{self.name} from {self.owner} ,(£{self.price})'
     
+    def get_average_rating(self):
+        votes = self.votes.all()
+        if votes.exists():
+            return votes.aggregate(models.Avg('vote'))['vote__avg']
+        return None
