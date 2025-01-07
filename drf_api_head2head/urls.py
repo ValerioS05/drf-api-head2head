@@ -23,5 +23,6 @@ urlpatterns = [
     path('categories/', include('categories.urls')),
     path('profiles/', include('profiles.urls')),
     path('products/', include('products.urls')),
-    path('comments/', include('comments.urls'))
+    path('comments/', include('comments.urls')),
+    path('votes/', include('votes.urls')),
 ]
