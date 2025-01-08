@@ -4,6 +4,7 @@ from drf_api_head2head.permissions import IsOwnerOrReadOnly
 from .models import Vote
 from .serializers import VoteSerializer
 
+
 class VoteList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = VoteSerializer

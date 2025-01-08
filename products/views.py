@@ -1,4 +1,4 @@
-from django.db.models import Count
+from django.db.models import Count, Avg
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_api_head2head.permissions import IsOwnerOrReadOnly
@@ -9,7 +9,9 @@ from .serializers import ProductSerializer
 class ProductList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = ProductSerializer
-    queryset = Product.objects.all()
+    queryset = Product.objects.annotate(
+        average_rating=Avg('votes__vote')
+    )
 
     filter_backends = [
         filters.OrderingFilter,
@@ -26,6 +28,7 @@ class ProductList(generics.ListCreateAPIView):
         'name',
         'price',
         'created_at',
+        'average_rating',
     ]
     filterset_fields = [
         'category',

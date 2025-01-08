@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'products',
     'comments',
     'votes',
+    'comparisons',
 ]
 
 MIDDLEWARE = [
