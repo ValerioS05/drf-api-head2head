@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 if os.path.exists('env.py'):
     import env
@@ -47,6 +48,7 @@ REST_USE_JWT = True
 JWT_AUTH_SECURE = True
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
+JWT_AUTH_SAMESITE = 'None'
 
 REST_AUTH_SERIALIZER = {
     'USER_DETAILS_SERIALIZER': 'drf_api_head2head.serializers.CurrentUserSerializer'
@@ -55,17 +57,18 @@ REST_AUTH_SERIALIZER = {
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*es@*8vek6=ix5dum04ahfzz93p2)3b)me(7v&2w=1qub7n)bo'
-
+SECRET_KEY =  SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
-    '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net'
+    '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
+    'drf-api-head2head.herokuapp.com'
     ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
+    'drf-api-head2head.herokuapp.com'
 ]
 
 # Application definition
@@ -88,6 +91,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'corsheaders',
 
     'categories',
     'profiles',
@@ -108,8 +112,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
+if 'CLIENT_ORIGIN' in os.environ:
+    CORS_ALLOWED_ORIGINS = [
+        os.environ.get('CLIENT_ORIGIN')
+    ]
+else:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https:\/\/.*\.codeinstitute-ide\.net$",
+    ]
+CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'drf_api_head2head.urls'
 
 TEMPLATES = [
@@ -134,13 +148,17 @@ WSGI_APPLICATION = 'drf_api_head2head.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'DEV' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
