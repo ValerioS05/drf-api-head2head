@@ -8,10 +8,15 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_is_owner(self,obj):
         request = self.context['request']
         return request.user == obj.owner
-        
 
     class Meta:
         model = Profile
         fields = [
-            'id', 'owner', 'bio', 'profile_picture', 'location', 'is_owner', 'favourites'
+            'id',
+            'owner',
+            'bio',
+            'profile_picture',
+            'location',
+            'is_owner',
+            'favourites',
         ]

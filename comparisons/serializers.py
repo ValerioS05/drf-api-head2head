@@ -6,16 +6,6 @@ class ComparisonSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     created_at = serializers.ReadOnlyField()
     products = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), many=True)
-
-    class Meta:
-        model = Comparison
-        fields = [
-            'id',
-            'owner',
-            'products',
-            'created_at',
-        ]
-    
     def validate_products(self, value):
         if len(value) != 2:
             raise serializers.ValidationError(
@@ -27,3 +17,14 @@ class ComparisonSerializer(serializers.ModelSerializer):
                 "Can't compare the same product."
                 )
         return value
+
+    class Meta:
+        model = Comparison
+        fields = [
+            'id',
+            'owner',
+            'products',
+            'created_at',
+        ]
+    
+    

@@ -4,22 +4,21 @@ from .models import Product
 class ProductSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     created_at = serializers.ReadOnlyField()
-    image = serializers.ReadOnlyField(source='owner.profile.image.url')
     average_rating = serializers.SerializerMethodField()
-    
-    def validate_image(self, value):
-        if value.size > 1024 * 1024 * 2:
-            raise serializers.ValidationError(
-                'Image size must not be larger than 2MB.'
-            )
-        if value.image.width > 4096:
-            raise serializers.ValidationError(
-                'Image width must be smaller than 4096px.'
-            )
-        if value.image.height > 4096:
-            raise serializers.ValidationError(
-                'Image height must be smaller than 4096px.'
-            )
+    is_owner = serializers.SerializerMethodField()
+
+    def get_is_owner(self,obj):
+        request = self.context['request']
+        return request.user == obj.owner
+
+    def validate_price(self, value):
+        if value <= 0:
+            raise serializers.ValidationError('Price must be greater than 0.')
+        return value
+
+    def get_average_rating(self, obj):
+        return obj.get_average_rating()
+
     class Meta:
         model = Product
         fields = [
@@ -34,13 +33,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'features',
             'created_at',
             'owner',
+            'is_owner'
             'average_rating',
         ]
-
-    def validate_price(self, value):
-        if value <= 0:
-            raise serializers.ValidationError('Price must be greater than 0.')
-        return value
-
-    def get_average_rating(self, obj):
-        return obj.get_average_rating()
