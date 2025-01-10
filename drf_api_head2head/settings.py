@@ -63,12 +63,12 @@ DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
-    'drf-api-head2head.herokuapp.com'
+    'https://drf-api-head2head-be132ded7692.herokuapp.com'
     ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
-    'https://drf-api-head2head.herokuapp.com'
+    'https://drf-api-head2head-be132ded7692.herokuapp.com'
 ]
 
 # Application definition
