@@ -33,6 +33,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'features',
             'created_at',
             'owner',
-            'is_owner'
+            'is_owner',
             'average_rating',
         ]

@@ -20,7 +20,7 @@ class VoteSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'owner',
-            'is_owner'
+            'is_owner',
             'product',
             'vote',
             'created_at',

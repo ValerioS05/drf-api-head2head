@@ -18,11 +18,16 @@ class ComparisonSerializer(serializers.ModelSerializer):
                 )
         return value
 
+    def get_is_owner(self,obj):
+        request = self.context['request']
+        return request.user == obj.owner
+
     class Meta:
         model = Comparison
         fields = [
             'id',
             'owner',
+            'is_owner',
             'products',
             'created_at',
         ]
