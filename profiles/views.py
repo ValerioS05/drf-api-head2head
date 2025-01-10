@@ -17,6 +17,7 @@ class ProfileList(generics.ListCreateAPIView):
         'owner__username',
         'bio',
         'location',
+        'favourite'
     ]
     ordering_fields = [
         'owner__username',

@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from cloudinary.models import CloudinaryField
 from django.contrib.auth.models import User
+from products.models import Product
 
 class Profile(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -13,8 +14,8 @@ class Profile(models.Model):
         null=True,
         default='default_h2h'
     )
-    #favourites = models.ManyToManyField(Product) # need to add after the creation of profile
-    
+    favourites = models.ManyToManyField(Product, blank=True, related_name='favorited_by')
+
     class Meta:
         ordering = [
             '-location',
