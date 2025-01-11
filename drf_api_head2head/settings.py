@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import re
 from pathlib import Path
 import os
 import dj_database_url
@@ -62,8 +62,8 @@ SECRET_KEY =  SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
-    '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
-    'https://drf-api-head2head-be132ded7692.herokuapp.com'
+    os.environ.get('ALLOWED_HOST'),
+    'localhost',
     ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -119,9 +119,9 @@ if 'CLIENT_ORIGIN' in os.environ:
     CORS_ALLOWED_ORIGINS = [
         os.environ.get('CLIENT_ORIGIN')
     ]
-else:
+if 'CLIENT_ORIGIN_DEV' in os.environ:
     CORS_ALLOWED_ORIGIN_REGEXES = [
-        r"^https:\/\/.*\.codeinstitute-ide\.net$",
+         r"^https:\/\/.*\.codeinstitute-ide\.net$",
     ]
 CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'drf_api_head2head.urls'
