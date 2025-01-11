@@ -6,6 +6,7 @@ class ComparisonSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     created_at = serializers.ReadOnlyField()
     products = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), many=True)
+    is_owner = is_owner = serializers.SerializerMethodField()
     
     def validate_products(self, value):
         if len(value) != 2:

@@ -15,7 +15,7 @@ class ComparisonList(generics.ListCreateAPIView):
     ]
     search_fields = [
         'owner__username',
-        'products__name',
+        'products__id'
     ]
     ordering_fields = [
         'created_at',
@@ -23,6 +23,7 @@ class ComparisonList(generics.ListCreateAPIView):
     ]
     filterset_fields = [
         'owner__username',
+        'products',
     ]
 
     def perform_create(self, serializer):
