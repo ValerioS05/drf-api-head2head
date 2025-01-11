@@ -7,7 +7,10 @@ class VoteSerializer(serializers.ModelSerializer):
     created_at = serializers.ReadOnlyField()
     product = serializers.ReadOnlyField(source='product.id')
     is_owner = serializers.SerializerMethodField()
-
+    def get_is_owner(self,obj):
+        request = self.context['request']
+        return request.user == obj.owner
+    
     def validate_vote(self, value):
         if not (1 <= value <= 5):
             raise serializers.ValidationError(
