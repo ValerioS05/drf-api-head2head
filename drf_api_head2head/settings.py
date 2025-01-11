@@ -64,6 +64,8 @@ DEBUG = 'DEV' in os.environ
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
     'localhost',
+    '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net'
+    
     ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -200,3 +202,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticCloudinaryStorage'
