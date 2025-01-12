@@ -20,7 +20,6 @@ if os.path.exists('env.py'):
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
 }
-print("CLOUDINARY_URL:", os.environ.get('CLOUDINARY_URL'))
 MEDIA_URL = '/media/'
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -36,8 +35,8 @@ REST_FRAMEWORK = {
     )],
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE':10,
-    'DATETIME_FORMAT' :'%d %b %Y',
+    'PAGE_SIZE': 10,
+    'DATETIME_FORMAT': '%d %b %Y',
 }
 if 'DEV' not in os.environ:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] = [
@@ -57,20 +56,20 @@ REST_AUTH_SERIALIZER = {
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =  SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
     'localhost',
-    '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net'
-    
+    '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
+    'https://drf-api-head2head-be132ded7692.herokuapp.com',
     ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
-    'https://drf-api-head2head-be132ded7692.herokuapp.com'
+    'https://drf-api-head2head-be132ded7692.herokuapp.com',
 ]
 
 # Application definition
@@ -115,16 +114,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 if 'CLIENT_ORIGIN' in os.environ:
     CORS_ALLOWED_ORIGINS = [
         os.environ.get('CLIENT_ORIGIN')
     ]
-if 'CLIENT_ORIGIN_DEV' in os.environ:
+else:
     CORS_ALLOWED_ORIGIN_REGEXES = [
-         r"^https:\/\/.*\.codeinstitute-ide\.net$",
+        r"^https:\/\/.*\.codeinstitute-ide\.net$",
     ]
+
 CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'drf_api_head2head.urls'
 
@@ -202,5 +203,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticCloudinaryStorage'
