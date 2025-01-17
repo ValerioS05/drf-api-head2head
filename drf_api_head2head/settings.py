@@ -70,9 +70,9 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
-    'https://3000-valerios05-head2head-1sgo8pctgy8.ws.codeinstitute-ide.net/'
+    'https://3000-valerios05-head2head-1sgo8pctgy8.ws.codeinstitute-ide.net/',
     'https://drf-api-head2head-be132ded7692.herokuapp.com',
-    'https://head2head-22b839c8291c.herokuapp.com/'
+    'https://head2head-22b839c8291c.herokuapp.com/',
 ]
 
 # Application definition
@@ -125,7 +125,10 @@ if "CLIENT_ORIGIN" in os.environ:
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.codeinstitute-ide\.net$"
 ]
-
+if 'CLIENT_ORIGIN_DEV' in os.environ:
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+         r"^https:\/\/.*\.codeinstitute-ide\.net$",
+    ]
 CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'drf_api_head2head.urls'
 
