@@ -7,25 +7,15 @@ from drf_api_head2head.permissions import IsStaffUser
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsStaffUser]
-    
+    permission_classes = [permissions.IsAuthenticated | IsStaffUser]
     filter_backends = [
         filters.OrderingFilter,
         filters.SearchFilter,
         DjangoFilterBackend,
     ]
-    search_fields = [
-        'name',
-        'description',
-    ]
-    ordering_fields = [
-        'name',
-        'description',
-    ]
-    filterset_fields = [
-        'name',
-        'description',
-    ]
+    search_fields = ['name', 'description']
+    ordering_fields = ['name', 'description']
+    filterset_fields = ['name', 'description']
 
     def perform_create(self, serializer):
         serializer.save()
@@ -33,4 +23,4 @@ class CategoryList(generics.ListCreateAPIView):
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsStaffUser]
+    permission_classes = [permissions.IsAuthenticated | IsStaffUser]
