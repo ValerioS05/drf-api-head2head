@@ -6,6 +6,8 @@ class ProductSerializer(serializers.ModelSerializer):
     created_at = serializers.ReadOnlyField()
     average_rating = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
+    profile_id = serializers.ReadOnlyField(source='owner.profile.id')
+    profile_image = serializers.ReadOnlyField(source='owner.profile.profile_picture.url')
 
     def get_is_owner(self,obj):
         request = self.context['request']
@@ -35,4 +37,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'owner',
             'is_owner',
             'average_rating',
+            'profile_id',
+            'profile_image',
         ]
