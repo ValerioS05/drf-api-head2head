@@ -65,6 +65,7 @@ DEBUG = 'DEV' in os.environ
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
     'localhost',
+    '127.0.0.1',
     '8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
     'https://drf-api-head2head-be132ded7692.herokuapp.com',
     ]
