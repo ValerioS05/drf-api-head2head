@@ -79,17 +79,24 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 if "CLIENT_ORIGIN" in os.environ:
-    CORS_ALLOWED_ORIGINS = [os.environ.get("CLIENT_ORIGIN")]
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+        "https://drf-api-head2head-be132ded7692.herokuapp.com",
+        os.environ.get("CLIENT_ORIGIN")
+    ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://.*\.codeinstitute-ide\.net$"
+    r"^https://.*\.codeinstitute-ide\.net$",
+    r"^https://drf-api-head2head-be132ded7692\.herokuapp\.com$",
+    r"^http://localhost:3000$"
 ]
+
+
 if 'CLIENT_ORIGIN_DEV' in os.environ:
-    CORS_ALLOWED_ORIGIN_REGEXES = [
-         r"^https:\/\/.*\.codeinstitute-ide\.net$",
-    ]
+    CORS_ALLOWED_ORIGIN_REGEXES.append(os.environ.get('CLIENT_ORIGIN_DEV'))
+
 CORS_ALLOW_CREDENTIALS = True
-# Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
