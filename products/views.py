@@ -1,4 +1,4 @@
-from django.db.models import Count, Avg
+from django.db.models import Avg
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_api_head2head.permissions import IsOwnerOrReadOnly
@@ -34,6 +34,7 @@ class ProductList(generics.ListCreateAPIView):
         'category',
         'price',
     ]
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 

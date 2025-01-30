@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Product
+from votes.models import Vote
+
 
 class ProductSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
@@ -7,10 +9,12 @@ class ProductSerializer(serializers.ModelSerializer):
     average_rating = serializers.SerializerMethodField()
     is_owner = serializers.SerializerMethodField()
     profile_id = serializers.ReadOnlyField(source='owner.profile.id')
-    profile_picture = serializers.ReadOnlyField(source='owner.profile.profile_picture.url')
+    profile_picture = serializers.ReadOnlyField(
+        source='owner.profile.profile_picture.url'
+        )
     vote_id = serializers.SerializerMethodField()
-    
-    def get_is_owner(self,obj):
+
+    def get_is_owner(self, obj):
         request = self.context['request']
         return request.user == obj.owner
 
@@ -23,12 +27,12 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.get_average_rating()
 
     def get_vote_id(self, obj):
-        request = self.context.get('request', None)
-        if request and request.user.is_authenticated:
-            vote = Vote.objects.filter(owner=request.user, product=obj).first()
+        user = self.context['request'].user
+        if user.is_authenticated:
+            vote = Vote.objects.filter(product=obj, owner=user).first()
             return vote.id if vote else None
         return None
-    
+
     class Meta:
         model = Product
         fields = [

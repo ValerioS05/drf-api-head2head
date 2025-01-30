@@ -3,6 +3,7 @@ from rest_framework.exceptions import ValidationError
 from drf_api_head2head.permissions import IsOwnerOrReadOnly
 from .models import Vote
 from .serializers import VoteSerializer
+from products.models import Product
 
 
 class VoteList(generics.ListCreateAPIView):

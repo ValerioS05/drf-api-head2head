@@ -1,4 +1,3 @@
-from django.db import IntegrityError
 from rest_framework import serializers
 from .models import Vote
 
@@ -13,12 +12,19 @@ class VoteSerializer(serializers.ModelSerializer):
         return request.user == obj.owner
 
     def create(self, validated_data):
-        try:
+        request = self.context['request']
+        owner = request.user
+        product = validated_data.get('product')
+        existing_vote = Vote.objects.filter(
+            owner=owner, product=product
+            ).first()
+
+        if existing_vote:
+            existing_vote.vote = validated_data.get('vote', existing_vote.vote)
+            existing_vote.save()
+            return existing_vote
+        else:
             return super().create(validated_data)
-        except IntegrityError:
-            raise serializers.ValidationError({
-                'detail': 'possible duplicate'
-            })
 
     class Meta:
         model = Vote
