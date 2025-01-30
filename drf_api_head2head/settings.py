@@ -75,6 +75,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://3000-valerios05-head2head-1sgo8pctgy8.ws.codeinstitute-ide.net/',
     'https://drf-api-head2head-be132ded7692.herokuapp.com',
     'https://head2head-22b839c8291c.herokuapp.com/',
+    'http://localhost:3000'
 ]
 
 if "CLIENT_ORIGIN" in os.environ:
