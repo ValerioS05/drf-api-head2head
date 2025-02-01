@@ -51,7 +51,9 @@ JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 JWT_AUTH_SAMESITE = 'None'
 
 REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER': 'drf_api_head2head.serializers.CurrentUserSerializer'
+    'USER_DETAILS_SERIALIZER': (
+        'drf_api_head2head.serializers.CurrentUserSerializer'
+    )
 }
 
 # Quick-start development settings - unsuitable for production
@@ -71,7 +73,8 @@ ALLOWED_HOSTS = [
     ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-valerios05-drfapihead2h-lzcs2zi1lnq.ws.codeinstitute-ide.net',
+    'https://8000-valerios05-drfapihead2h-lzcs2zi1lnq.'
+    'ws.codeinstitute-ide.net',
     'https://3000-valerios05-head2head-1sgo8pctgy8.ws.codeinstitute-ide.net/',
     'https://drf-api-head2head-be132ded7692.herokuapp.com',
     'https://head2head-22b839c8291c.herokuapp.com/',
@@ -182,18 +185,31 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
 ]
+
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',

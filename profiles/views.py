@@ -4,6 +4,7 @@ from drf_api_head2head.permissions import IsOwnerOrReadOnly
 from .models import Profile
 from .serializers import ProfileSerializer
 
+
 class ProfileList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Profile.objects.all()
@@ -27,6 +28,7 @@ class ProfileList(generics.ListCreateAPIView):
         'location',
         'owner__username',
     ]
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
