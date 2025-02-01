@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from cloudinary.models import CloudinaryField
 from categories.models import Category
 
+
 class Product(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
@@ -12,7 +13,7 @@ class Product(models.Model):
         max_digits=10,
         decimal_places=2,
         validators=[MinValueValidator(0.01)]
-        )   
+        )
     location = models.CharField(max_length=250)
     image = CloudinaryField(
         'image',
@@ -39,7 +40,7 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name} from {self.owner} ,(£{self.price})'
-    
+
     def get_average_rating(self):
         votes = self.votes.all()
         if votes.exists():
