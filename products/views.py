@@ -22,7 +22,9 @@ class ProductList(generics.ListCreateAPIView):
         'name',
         'keywords',
         'category__name',
-        'owner__username'
+        'owner__username',
+        'price',
+        'location',
     ]
     ordering_fields = [
         'name',
