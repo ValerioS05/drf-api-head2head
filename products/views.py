@@ -21,7 +21,7 @@ class ProductList(generics.ListCreateAPIView):
     search_fields = [
         'name',
         'keywords',
-        'category',
+        'category__name',
         'owner__username'
     ]
     ordering_fields = [
