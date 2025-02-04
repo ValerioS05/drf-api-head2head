@@ -11,6 +11,10 @@ class CommentSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
+    profile_id = serializers.ReadOnlyField(source='owner.profile.id')
+    profile_picture = serializers.ReadOnlyField(
+        source='owner.profile.profile_picture.url'
+        )
 
     def get_created_at(self, obj):
         return naturaltime(obj.created_at)
@@ -26,6 +30,8 @@ class CommentSerializer(serializers.ModelSerializer):
             'product',
             'owner',
             'is_owner',
+            'profile_id',
+            'profile_picture'
             'content',
             'created_at',
         ]
