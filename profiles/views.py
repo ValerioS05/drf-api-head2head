@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, filters
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_api_head2head.permissions import IsOwnerOrReadOnly
+from drf_api_head2head.permissions import IsOwnerOrReadOnly, IsStaffUser
 from .models import Profile
 from .serializers import ProfileSerializer
 
@@ -34,6 +34,6 @@ class ProfileList(generics.ListCreateAPIView):
 
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly | IsStaffUser]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
