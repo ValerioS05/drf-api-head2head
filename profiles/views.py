@@ -37,3 +37,9 @@ class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly | IsStaffUser]
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+    def perform_update(self, serializer):
+        profile_picture = self.request.FILES.get('profile_picture', None)
+        if profile_picture:
+            serializer.validated_data['profile_picture'] = profile_picture
+            serializer.save()
