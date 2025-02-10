@@ -5,11 +5,13 @@ from .settings import (
     JWT_AUTH_SECURE,
 )
 
+
 @api_view()
 def root_route(request):
     return Response({
         "message": "Welcome to the drf_api_head2head API!"
     })
+
 
 @api_view(['POST'])
 def logout_route(request):
@@ -33,4 +35,3 @@ def logout_route(request):
         secure=JWT_AUTH_SECURE,
     )
     return response
-
