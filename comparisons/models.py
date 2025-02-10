@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from products.models import Product
 
+
 class Comparison(models.Model):
     products = models.ManyToManyField(Product, related_name='comparisons')
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -18,4 +19,3 @@ class Comparison(models.Model):
             str(product) for product in self.products.all()
         )
         return f"{self.owner} compared {product_names}"
-    
