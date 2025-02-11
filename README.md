@@ -1,7 +1,24 @@
 # Head2Head API Readme
 This is the readme for the **Head2Head** react appliction.
-
-
+## Goal of the API
+- This API has been built following the user stories created for the front end. I needed a good API that would let me handle the manipulation of datas for a comparison site. Firstly the though was about how the Comparison would be created
+  - For a comparison I needed Products. So the Product model was planned.
+  - During the planning of the Product I opted to create the categories as a separate model, it's more efficient and easier to handle.
+  - The categories were developed to group/ wrap the products.
+  - Now we could be set for a comparison, having products and categories. But, for a comparison we need a user that makes the actual comparison.
+  - So the Profiles were created to be connected to the User model. In this case the product and the comparison would be owned by an actual person.
+  - We could be set like this, but in a comparison site only displaying two products would be the minimum, so what I implemented was votes.
+  - The votes are connected to users and voting on a product is a good UX, we all know how it feels to leave a bad review on something (LOL).
+  - Oh review? Leaving only a Vote is not enough, let me share my thought on this product,and so the comments were implemented.
+  - Now the user stories for a common user are fulfilled. We have an API that let us manipulate products, comment and vote on them, group them by categories and finally compare them! (I also added favourites for more personalization but it was not implemented in the front end side.)
+  - The goal for this project is achieved.
+## Readme Map:
+  - [Head2Head API](#head2head-api-readme)
+  - [Overiew](#overview)
+  - [Plan](#plan)
+  - [Models](#models)
+  - [EndPoints](/endpoints.md)
+  - [Testing](/testing.md)
 ## Design of the database
 
 ### Overview
@@ -24,314 +41,275 @@ This is the readme for the **Head2Head** react appliction.
   - Authentication:
     - JWT has been implemented to give the user security and session based authentication.
 
-### Plan
+## Plan
 |||
 |--|--|
 |![Models Diagram](/images/readme_img/diagram.png)|This is the initial diagram used to plan out the API. As we can see we have 5 different models. First model is the categories, created first to wrap around the main model that is the product. The product model is the center of those models directly connected to all the other models via PK. The third model planned was the profile that takes count to the default user model offered by the framework. The profile is connected to the Vote,Comment and Product model.|The vote and the Comment model are conneted to the Product as 1 to many where a product can have multiple votes and comments.Last but not least is the comparison model, the comparison models is connected to product as a many to many where a product can have multiple comparison and viceversa.
   - **To note** is that this diagram was made before the development of the API and as so , some of the model may have been improved for data integrity / efficiency.
+## Models
 
-### API EndPoints
-#### Categories
-The /categories/ endpoint allows to manage categories for the products. Categories helps organize products into specific groups.
-  - **GET**
-    - Fetches the list of all categories
-    
-    - Returns a list of categories and its details:
-      |||
-      |--|--|
-      |![Categories JSON](/images/readme_img/cateogories.png)|In here we can see the categories returned from the get. We got: id: Identified for the actual category. Description: Description of a category. Image: the actual path to the image.|
-  - **GET /categories/{id}/**
-    - Fetches the datails of a specific category by ID.
-      |||
-      |--|--|
-      |![Categories GET by ID](/images/readme_img/categoriesid.png)|In here the response is a single category and the details inserted from the POST or PUT.|
-  - **POST**
-    - Creates a new category.
-    - The creation of a category is accessible only in the API due to   the high risk of deleting a huge amount of data.
-    - Request Body: You need to provide the name , description for the new category  and the image.
-    - The ID is set automatically on creation.
-      |||
-      |--|--|
-      |![Categories POST](/images/readme_img/postcategory.png)|This is the view from the admin panel with a simple form Name,Description and image input.|
-  - **PUT /categories/{id}/**
-    - Changes a category.
-    - As the POST the creation of a category is allowed only in the API admin panel.
-    - Request body:(First we need to select the category that we want to change) You need to provide the name , description for the selected category and the image. To have a better view of modified categories you can have a look at the history of it.
-      |||
-      |--|--|
-      |![Categories PUT](/images/readme_img/changecat.png)|As you can see we have already the existing details in the form.|
-  - **DELETE /categories/{id}/**
-    - Deletes a category
-    - To note that when a category can be deleted only when no products are associated with it to prevent loss of data and data integrity. If the deleting a category fails the reason is only the one just explained. (Later explained in the product modes.)
-    - The deletion is very simple, select the category that you want to delete and confirm. When succesfully deleted you will have a confirmation feedback. 
-      |||
-      |--|--|
-      |![Categories Delete](/images/readme_img/deletecat.png)|This is the message after a succesfful delete action.|
-  - **Filtering, Search, and Ordering**
-  -  Search: You can search categories by name or description using query parameters. For example:
-     -  GET /categories/?search=tech
-     -  Ordering: Categories can be ordered by name or description.
-     -  GET /categories/?ordering=name
-     -  Filtering: You can filter categories based on specific fields such as name or description.
-     -  GET /categories/?name=tech
-  - **Notes**
-    - The category model at the start was designed to display a category on its own page as per the creation ,modification and deletion. During the development of the client side this part was left out due to overwelm on the user. The user should only be able to see the category of a product but there is not need of a literal explanation or any way to modify the category and especially delete it. I opted to leave the full code as it was from the start for future features over this part of the API.
-#### Products
-The /products/ endpoint allows the user to manage products. Each product belongs to a category and has many attributes like price, location, keywords etc..
-  - **GET /products/**
-    - Fetches a list of all products.
-    - Accessible to all authenticated users or read-only for non-authenticated users.
-    - Returns a list of products with details like id, name, category, price, location, average_rating, and other information.
-      |||
-      |--|--|
-      |![Products GET](/images/readme_img/products.png)|The products are returned from the get in this format. Every product is defined by its primary key followed but the rest of the properties. When the database is populated by many product we have them paginated as you can see on the top side of the image.|
-  - **POST /products/**
-    - Creates a new product.
-    - Accessible to authenticated users only.(To note that in the Front end the creation of the product is allowed to staff users only.)
-    - Requires name, category, description, price, location, keywords, and features. The other fields will set depending on the user and the interacions on the   product for the average rating and the vote_id.
-      |||
-      |--|--|
-      |![Products POST](/images/readme_img/prodpost.png)| The post admits this props to be created.(The create_at is automatically set upon creation).|
-  - **GET /products/{id}/**
-    - Fetches the details of a specific product by id.
-    - Accessible to all authenticated users.
-    - Returns detailed information about a signle product.
-      |||
-      |--|--|
-      |![Products GET by ID](/images/readme_img/getprod.png)|In here we get a signle product detailed to note that average rating and vote id are null when no data has been submitted for those two properties.|
-  - **PUT /products/{id}/**
-    - Updates the details of a specific product by id.
-    - Accessible only by the owner of the product or staff users.
-    - You can update the product’s name, category, description, price, location, keywords, features and image.
-      |||
-      |--|--|
-      |![Products PUT](/images/readme_img/prodput.png)|In this image seen from the admin panel , you can see how the product is already populated by its actual details, we can change any of these details at our delight.| 
-  - **DELETE /products/{id}/**
-    - Deletes a specific product by id.
-    - Accessible only by the owner of the product or staff users.
-    - Returns a success message
-      |||
-      |--|--|
-      |![Products PUT](/images/readme_img/prodel.png)|In here is the response that we get once a product is deleted and no data is anymore available.|
+1. Category Model
+   - The Category model represents a category under which products can be wrapped. It includes:
 
-#### Profiles
-The /profiles/ endpoint allows users to manage their profiles. Each profile is linked to a user and includes bio, location, and profile picture. Users can also mark products as favourites.
-The profile gets created automatically anytime a User is added to the database. To note is that when a user is created from the API the details of the profile are not fully set, and it will contain the profile_picture (default if not selected), the owner (User username), and the id.  
-To learn more about the User model you can follow this link --> [Django doc for the User model.](https://docs.djangoproject.com/en/5.1/ref/contrib/auth/)
-  - **GET /profiles/**
-    - Fetches all profiles.
-    - Accessible to all authenticated users or read only for non authenticated users.
-    - Returns a list of profiles with id, owner, bio, profile_picture, location, and favourites.
-      |||
-      |--|--|
-      |![Profiles GET](/images/readme_img/profget.png)|In here we see the returned profiles. We have all the properties returned from the profile model with the addition of the is_staff that is used to give authorization to certain users to perform a series of actions.| 
-  - **GET /profiles/{id}/**
-    - Fetches details of a specific profile by ID.
-    - Returns  a single profile with its details.
-      |||
-      |--|--|
-      |![Profiles GET](/images/readme_img/profgetid.png)|In here we have a single profile returned.|
-  - **POST /profiles/**
-    - Creates a new profile.
-    - Profiles are automatically created when a new user is registered.
-    - To note is that creating a profile from the admin panel is not an option due to restriction on the owner (User username) and it will return a message       explaining that a profile for that owner already exists.
-    - |||
-      |--|--|
-      |![Profiles POST](/images/readme_img/profpost.png).|We can see here an example of posting a profile. This restriction works perfectly to manage data integrity and clutter of datas.|
-     
-  - **PUT /profiles/{id}/**
-    - Updates a profile.
-    - Only the profile owner or staff users can edit profiles.
-      |||
-      |--|--|
-      |![Profiles PUT](/images/readme_img/profput.png)|As we can see here we have a form to change the profile with all its details. The image shows the current picture selected for this profile, under it a input to change the image to a new one.|
-  - **DELETE /profiles/{id}/**
-    - Deletes a profile.
-    - Only the profile owner or staff users can delete a profile.
-    - To mention is that this operation is handled only in the API admin panel and when a profile is deleted the user instance will still be preserved for data integrity.
-      |||
-      |--|--|
-      |![Profiles DELETE](/images/readme_img/profdel.png)|A message is returned by the panel upon successfull deletion.|
-  - **Filtering, Search, and Ordering**
-    -  Search:
-       -  You can search profiles by owner, bio, or location:
-       -  GET /profiles/?search=London
-    -  Ordering:
-       -  Profiles can be ordered by username or location:
-       -  GET /profiles/?ordering=owner__username
-    -  Filtering:
-       -  You can filter profiles by location or owner__username:
-       -  GET /profiles/?location=London
-    - **Notes**
-      - A profile is automatically created when a new user registers.
-      - The favourites field stores many to many relationships between profiles and products.
+   - Fields:
 
-#### Comments 
-The /comments/ endpoint allows users to add, view, edit, and delete comments on products. A comment is connected to a product and a user.
-- GET **/comments/**
-  - Fetches a list of all comments.
-  - Accessible to all, read only for non authenticated users.
-  - Returns a list of comments with id, product, owner, content, created_at, and profile_picture.
-    |||
-    |--|--|
-    |![Comments GET](/images/readme_img/comget.png)|In here we can see the comment objects fetched, each of the comments returns the details specified before, to note is that the profile_id profile_picture and created_at are set automatically upon creation.|
-- **GET /comments/{id}/**
-  - Fetches the details of a specific comment returning a single comment in the same format as the picture above.
-- **POST /comments/**
-  - Creates a new comment on a product.
-  - Only authenticated users can post comments.
-  - Requires a product and content.
-    |||
-    |--|--|
-    |![Comments POST](/images/readme_img/compost.png)|An example of a comment can be created from the admin panel requiring these elements.|
-- **PUT /comments/{id}/**
-  -  Updates the content of a comment.
-  -  Only the comment owner can edit.
-  -  Request require the content field.
-  -The form is the same as the POST with the only difference is that the fields are already populated with the existing data.
-- **DELETE /comments/{id}/**
-  - Deletes a specific comment.
-  - Only the comment owner/staff users can delete comments.
-    |||
-    |--|--|
-    |![Comments DELETE](/images/readme_img/comdel.png)|Upon successfull deletion a message is returned and data is destroyed.|
-- **Filtering, Search, and Ordering**
-  - Search:
-    - You can search comments by owner, content, or product name:
-    - GET /comments/?search=great
-  - Ordering:
-    - Comments can be ordered by username or created_at:
-    - GET /comments/?ordering=created_at
-  - Filtering:
-    - You can filter comments by owner or product id:
-    - GET /comments/?owner__username=name
-    - GET /comments/?product=5
-- **Notes**
-  - Comments are automatically associated with the user.
-  - The created_at field uses natural time formatting (ex:5 minutes ago).
-  - Users cannot edit or delete comments they do not own(staff users can delete any comment.).
+   - name: A CharField for the category name (unique).
+   - description: A TextField for providing a description of the category.
+   - image: A CloudinaryField used for storing an image related to the category. It defaults to 'default_h2h' if no image is provided.
+   - Meta class:
 
-#### Votes
-The /votes/ endpoint allows users to rate products by assigning a vote (1-5 stars). Each user can vote only once per product, and can update an existing vote.
-- **GET /votes/**
-  - Fetches a list of all votes.
-  - Accessible to all users, read only for non authenticated users.
-  - Returns id, owner, product, vote, and created_at.
-    |||
-    |--|--|
-    |![Vote GET](/images/readme_img/votget.png)|This is the votes returned from the GET endpoint, we can see the details of each comment with the addition of is_owner that specify the ownership of a vote.|
-- **GET /votes/{id}/**
-  - Fetches details of a specific vote by id.
-  - Returns a single vote object (See the picture above). 
-- **POST /votes/**
-  - Creates or updates a vote for a product.
-  - Only authenticated users can vote.
-  - Users can vote only once per product. If a vote already exists, it will be updated.
-    |||
-    |--|--|
-    |![Vote POST](/images/readme_img/votpost.png)|Simple form to post a vote requiring the Owner the Product and the value.(To note the value can be only 1-5.).|
-- **PUT /votes/{id}/**
-  - Updates an existing vote.
-  - Only the vote owner can update.
-    |||
-    |--|--|
-    |![Vote PUT](/images/readme_img/votput.png)|As the previous picture we have a form we the data is already prepopulated and giving the chance to update the value of the vote.|
-- **DELETE /votes/{id}/**
-  - Deletes a specific vote.
-  - Only the vote owner can delete their vote.
-    |||
-    |--|--|
-    |![Vote DELETE](/images/readme_img/votdel.png)|Returns a feedback of successfull deletion and the data are destroyed.|
-- **Notes**
-  - Users can only vote once per product (vote updates are allowed).
-  - Votes are restricted to a 1-5 range and not negatives are allowed.
-  - Unauthenticated users can view votes but cannot create or modify them.
-  - The created_at field is formatted in natural time (ex: 5 minutes ago).
-#### Comparisons
-The /comparisons/ endpoint allows users to compare exactly two products. Users can create, view, update, and delete comparisons, but only the owner of a comparison can modify or delete it.
-- **GET /comparisons/** and **/comparisons/{id}/**
-  - Fetches a list of all comparisons and fetches a comparison by id.
-  - Only authenticated users can create comparisons, but all users can view them.
-  - Includes comparison id, owner, products, and created_at.
-    |||
-    |--|--|
-    |![Comparison GET](/images/readme_img/compget.png)|In here we have a single comparison object it returns an id with the owner and ownership. The products are inside and array of ids to end with the created_at.|
-- **POST /comparisons/**
-  - Allows authenticated users to create a comparison.
-  - Must include exactly two different products.
-    |||
-    |--|--|
-    |![Comparison POST](/images/readme_img/comppost.png)|Adding a comparison requires 2 products and this is a must. Plus the owner. The created at is added automatically to it.Selecting the same product is not allowed.|
-- **PUT /comparisons/{id}/**
-  - Allows the owner to update the comparison.
-  - Must contain exactly two different products (same as the creation of a comparison.).
-  - Refer to the above picture for the form, the only difference is that the data is already prepopulated.
-- **DELETE /comparisons/{id}/**
-  - Allows the owner to delete a comparison.
-  - Requires authentication.
-    |||
-    |--|--|
-    |![Comparison POST](/images/readme_img/compdel.png)|In this example we have the successfull deletion of 26 comparisons(26 were added due to the submit button still available after submission in the client side that has been fixed.)|
+   - Orders categories by name.
+   - Method:
 
-### Dependencies
-- asgiref=3.8.1
+   - The __str__() method returns the category name.
+2. Comment Model
+   - The Comment model represents a comment made by a user on a product. It includes:
+
+   - Fields:
+
+   - product: A ForeignKey to the Product model.
+   - owner: A ForeignKey to the User model (the user who made the comment).
+   - content: A TextField containing the comment content.
+   - created_at: A DateTimeField to track when the comment was created.
+   - Meta class:
+
+   - Orders comments by creation (latest first).
+   - Method:
+
+   - The __str__() method returns a string representation of the comment, including the user and product associated with the comment.
+3. Product Model
+   - The Product model represents the details of a product. It includes:
+
+   - Fields:
+
+   - name: A CharField representing the product name.
+   - category: A ForeignKey to the Category model.
+   - description: A TextField for describing the product.
+   - price: A DecimalField for storing the price, with a minimum value of 0.01.
+   - location: A CharField indicating where the product is located.
+   - image: A CloudinaryField to store an image of the product.
+   - keywords: A TextField to store keywords related to the product.
+   - features: A TextField that contains features of the product.
+   - created_at: A DateField representing when the product was created.
+   - owner: A ForeignKey to the User model(user who created the product).
+   - Meta class:
+
+   - Orders products by name, location, category (in descending order), and price (in descending order).
+   - Methods:
+
+   - The __str__() method returns a string representation of the product, including the product name, owner, and price.
+   - The get_average_rating() method calculates the average rating for the product based on Vote objects.
+4. Profile Model
+   - The Profile model is a user profile that stores additional information about a user. It includes:
+
+   - Fields:
+
+   - owner: A OneToOneField to the User model, creating a one to one relationship between the user and their profile.
+   - bio: A TextField for the user bio.
+   - location: A CharField for the user location.
+   - profile_picture: A CloudinaryField for the user profile image.
+   - favourites: A ManyToManyField to the Product model, representing the products that the user has favourited.
+   - Meta class:
+
+   - Orders profiles by location in descending order.
+   - Methods:
+
+   - The __str__() method returns a string representation of the profile.
+   - The new_user() function is a signal that automatically creates a Profile when a new User is created.
+5. Vote Model
+   - The Vote model represents a vote (or rating) given by a user to a product. It includes:
+
+   - Fields:
+
+   - owner: A ForeignKey to the User model, the user who gave the vote.
+   - product: A ForeignKey to the Product model, the product that received the vote.
+   - created_at: A DateTimeField to track when the vote was created.
+   - vote: An IntegerField for the vote value, limited to be between 1 and 5.
+   - Meta class:
+
+   - Orders votes first by the owner, then by product, and by the creation time (latest first).
+   - The unique_together constraint ensures that a user can only vote once on a product.
+   - Method:
+
+   - The __str__() method returns a string representation of the vote.
+6. Comparison Model
+  - The Comparison model represents a comparison between multiple products. It includes:
+
+  - Fields:
+
+  - products: A ManyToManyField linking to the Product model. This field indicates the products that are being compared.
+  - owner: A ForeignKey relationship to the User model, the user who owns the comparison.
+  - created_at: A DateTimeField that tracks when the comparison was created.
+  - Meta class:
+
+  - Orders comparisons by creation time (latest first).
+  - Method:
+
+  - The "__str__()" method returns a string representation of the comparison.
+
+### Relationships Between Models:
+  - Comparison to Products: The Comparison model has a ManyToManyField to Product, which means a comparison can have multiple products.  
+    The Comparison model also has a ForeignKey to the User model, which means each comparison belongs to a specific user.
+
+  - Comment to Product: The Comment model has a ForeignKey to the Product model, connecting comments to specific products.  
+    It also has a ForeignKey to the User model, so each comment is connected to a user.
+
+  - Product to Category: The Product model has a ForeignKey to the Category model, so each product is assigned to a category.
+
+  - Profile to User: The Profile model has a OneToOneField to the User model, ensuring that each user has a corresponding profile with additional infos.  
+    The Profile is created automatically with the help of a signal that get the user instance when created.
+
+  - Vote to Product and User: The Vote model links a user to a product they have voted. Each vote is associated with a Product and a User.
+
+  - Profile to Product (Favourites): The Profile model includes a ManyToManyField to the Product model, which means that users can set multiple products as favourites.  
+    This allows users to access their favourite products. **To note** is that the favourite is implemented but is not used in the frontend side of the app. It's only for demostration porpouses.
+
+#### How They Work Together:
+- Users can create products, comment on products, vote on products, and compare products.  
+  Products are organized into categories, can be rated, and are associated with comments and votes.  
+  Profiles allow users to maintain additional information, such as their bio, location, and favourite products.  
+  Comparisons allow users to compare products side by side and are associated with a user.  
+  This system allows for a comprehensive product evaluation platform with features like product reviews, ratings, comparisons, and personalized user profiles.  
+
+
+
+  #### CRUD
+  - Create:
+    - All functionalities are available to create any of the objects following the proper restrictions.
+  - Read:
+    - All functionalities are available to read any of the object following proper restrictions.
+  - Update:
+    - All functionalities are available to update any of the objects following proper restrictions.
+  - Delete:
+    - All functionalites are available to delete any of the objects. A different approach was taken for the categories.
+      - The categories follow a on delete.PROTECT in case a category is being deleted when containing products and in cascade the products contains votes and comments. This prevent corruption of data and mainly safeguarding the hard work put on adding all the products.  
+## Deployment
+- This API is hosted in Heroku and it uses a Postgres DB. The api is also connected to Cloudinary.
+- Before starting the deployment make sure you have created account for your Database and Cloudinary as for this project.
+  - **How to deploy on Heroku**
+    - Login on  Heroku and select Create New App
+    - Choose a name for the App that is consistent with your repository/ies.
+    - Select region based on where is you location (Europe for Head2Head)
+    - Once you did these two steps click on Create App
+    - Direct yourself to Settings in the menu.
+    - Scroll down to reveal config vars
+    - Once open enter these variables (key : value)
+    - CLOUDINARY_URL: your cloudinary URL
+      - To get this url you need to login in your cloudinary copy the url that you found in **API enviroment variable**
+    - DATABASE_URL: your database url (Postgres in this case)
+      - This url was provided by CodeInstitute form and the url was receive via confirmation mail.
+    - SECRET_KEY: the secret key choose by you
+    - ALLOWED_HOST: the url of your Heroku application
+    - CLIENT_ORIGIN: the complete URL of your Heroku app
+    - CLIENT_ORIGIN_DEV: the URL of your development (ex: http:localhost:3000)
+    - Once finished with this select Deploy in the menu
+    - Select GitHub from the options and Connect to GitHub selecting the repository of your app
+    - Find the Manual Deploy section and select Deploy Branch (Make sure is Main).
+    - Once Deployed you can eaither click on View or Open App to see your deployed App.
+    - Well done!
+    - (Note that you can also choose Automatic deploy to deploy your app automatically after each time you push code to your repo!!)
+  
+## Dependencies (Requirements.txt) and technologies
+- **asgiref=3.8.1**
   - A Python package required for Django's support of asynchronous views and middleware.
-  - [Asgi](https://asgi.readthedocs.io/en/latest/)
-- cloudinary==1.41.0
+    - [Asgi](https://asgi.readthedocs.io/en/latest/)
+- **cloudinary==1.41.0**
   - Cloudinary provides cloud-based media management used to integrate Cloudinary with Django.
-  - [Cloudinary](https://cloudinary.com/documentation)
-- dj-database-url==0.5.0
+    - [Cloudinary](https://cloudinary.com/documentation)
+- **dj-database-url==0.5.0**
   - A utility that helps configure Django database settings from a URL. Used in production environment (Heroku) to configure database connection via URL.
-  - [dj-database](https://github.com/jazzband/dj-database-url)
-- dj-rest-auth==2.1.9
+    - [dj-database](https://github.com/jazzband/dj-database-url)
+- **dj-rest-auth==2.1.9**
   - A Django package used for handling authentication in Django REST Framework. It simplifies the implementation of login, registration, and token authentication.
-  - [dj-rest-auth](https://dj-rest-auth.readthedocs.io/en/latest/)
-- Django==5.1.4
+    - [dj-rest-auth](https://dj-rest-auth.readthedocs.io/en/latest/)
+- **Django==5.1.4**
   - The framework for Python used to build this application.
-  - [Django](https://docs.djangoproject.com/en/5.1/)
-- django-allauth==0.54.0
+    - [Django](https://docs.djangoproject.com/en/5.1/)
+- **django-allauth==0.54.0**
   - A Django package for handling authentication.
-  - [Allauth](https://django-allauth.readthedocs.io/en/latest/)
-- django-cloudinary-storage==0.3.0
+    - [Allauth](https://django-allauth.readthedocs.io/en/latest/)
+- **django-cloudinary-storage==0.3.0**
   - A Django storage backend for Cloudinary. This package simplifies the integration of Cloudinary storage with Django applications.
-  - [Cloudinary-storage](https://pypi.org/project/django-cloudinary-storage/)
-
-- django-cors-headers==4.6.0
+    - [Cloudinary-storage](https://pypi.org/project/django-cloudinary-storage/)
+- **django-cors-headers==4.6.0**
   - A Django app for handling Cross Origin Resource Sharing (CORS). It allows your backend to specify which front end domains are permitted to interact with the api, preventing security issues when making requests from different domains.
-  - [Cors-headers](https://pypi.org/project/django-cors-headers/)
-- django-filter==24.3
+    - [Cors-headers](https://pypi.org/project/django-cors-headers/)
+- **django-filter==24.3**
   - A package for adding filtering capabilities to Django REST Framework views.
-  - [Django-filter](https://django-filter.readthedocs.io/en/stable/guide/usage.html)
-- djangorestframework==3.15.2
+    - [Django-filter](https://django-filter.readthedocs.io/en/stable/guide/usage.html)
+- **djangorestframework==3.15.2**
   - A toolkit for building Web APIs in Django. Provides tools for serialization, views, authentication, and more.
-  - [DRF](https://www.django-rest-framework.org/)
-- djangorestframework_simplejwt==5.4.0
+    - [DRF](https://www.django-rest-framework.org/)
+- **djangorestframework_simplejwt==5.4.0**
   - A Django REST Framework extension for handling JWT (Web Token) authentication.
-  - [Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/)
-- gunicorn==23.0.0
- Gunicorn is used to serve Django applications in production environments. It's a server that interacts with Django’s WSGI interface.
- [Gunicorn](https://docs.gunicorn.org/en/stable/)
-- oauthlib==3.2.2
+    - [Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/)
+- **gunicorn==23.0.0**
+  - Gunicorn is used to serve Django applications in production environments. It's a server that interacts with Django’s WSGI interface.
+    - [Gunicorn](https://docs.gunicorn.org/en/stable/)
+- **oauthlib==3.2.2**
   - It's often used with requests-oauthlib to facilitate OAuth integration in Python applications.
-  - [OAuthlib](https://readthedocs.org/projects/oauthlib/downloads/pdf/latest/)
-pillow==11.0.0
-A image processing library for Python. Pillow is used to handle image upload.
-[Pillow](https://pillow.readthedocs.io/en/stable/releasenotes/11.0.0.html)
-- psycopg2==2.9.10
+    - [OAuthlib](https://readthedocs.org/projects/oauthlib/downloads/pdf/latest/)
+- **pillow==11.0.0**
+  - A image processing library for Python. Pillow is used to handle image upload.
+    - [Pillow](https://pillow.readthedocs.io/en/stable/releasenotes/11.0.0.html)
+- **psycopg2==2.9.10**
   - A PostgreSQL adapter for Python. It allows your Django application to connect to and interact with a PostgreSQL database.
-  - [Psycopg2](https://www.psycopg.org/docs/install.html)
-- PyJWT==2.10.1
+    - [Psycopg2](https://www.psycopg.org/docs/install.html)
+- **PyJWT==2.10.1**
   - A Python library used to work with Web Tokens (JWT). PyJWT is used for encoding and decoding JWTs,used in conjunction with Django simplejwt.
-  - [PyJWT](https://readthedocs.org/projects/pyjwt/)
-- python3-openid==3.2.0
+    - [PyJWT](https://readthedocs.org/projects/pyjwt/)
+- **python3-openid==3.2.0**
   - A library that support for python 3. Used for integrations with services like Google, Facebook, etc.(Note that in this app is not used even if setup.)
-  - [Openid](https://pypi.org/project/python3-openid/)
-- requests-oauthlib==2.0.0
+    - [Openid](https://pypi.org/project/python3-openid/)
+- **requests-oauthlib==2.0.0**
   - A library that adds OAuth support to the requests HTTP library. 
-  - [Requests OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
-- sqlparse==0.5.3
+    - [Requests OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
+- **sqlparse==0.5.3**
   - sqlparse is a non-validating SQL parser for Python.
-  - [Sqlparse](https://sqlparse.readthedocs.io/en/stable/)
-- whitenoise==6.8.2
+    - [Sqlparse](https://sqlparse.readthedocs.io/en/stable/)
+- **whitenoise==6.8.2**
   - A package that allows your Django application to serve static files.
-  - [Whitenoise](https://whitenoise.readthedocs.io/en/latest/index.html)
+    - [Whitenoise](https://whitenoise.readthedocs.io/en/latest/index.html)
+- **Cloudinary**
+  - Used to handle the image database
+    - [Link to cloudinary](https://cloudinary.com/)
+- **PostgreSQL**
+  - Was used for the database. 
+    - [Link to PostrgreSQL](https://www.postgresql.org/)
+- These dependecies are taken from the requirements.txt (A reminder that once the dependencies or any toolking , helper etc.. are installed you need to follow the installation with the command pip freeze > requirements.txt)
+- **React extention for the Browser**
+  - It could be a simple extentions for the browser but the use of this extention helped the development of this project very much.
+ 
+#### Languages
+  - Python
+    - [Python Doc](https://www.python.org/doc/)
+
+#### Bugs and fixes
+- One of the most problematic bugs was the implementation of the authorization. When trying to access the Production site from Heroku the authorization was never given.
+  - Solution: The issue has been fixed by changing the setup in the main folder and the env.py variables matching the actual config vars in heroku.
+- Issue when trying to give image size restriction with cloudinary.
+  -  The issue has been solved by Implementing the restriction in the Front End, leaving the standard restriction by cloudinary in the backend.
+- Another problem arised when I moved from GitPod to VSCode.
+  -  The problem was again with authorization and I solved the issue changing again the Heroku config vars.
+- Mainly all the bugs and issues encoutered were about small fixes like missing commas or small typos. Even if small going through all that code was quite a  challenge.
+  - To help myself to identify the problems I found very helpfull the use of DevTools in Chrome and the default Debug set to True during development.
+ 
+|||
+|--|--|
+|![Fix](/images/readme_img/fix.png)|In here I was not receiving the right message from my comment. Even if not a large issue it took me a bit to spot.|
+
+
+
+#### Credits
+- The Repository was generated using the Code-Institute-Org/ci-full-template
+  - [Template](https://github.com/Code-Institute-Org/ci-full-template)
+    - Open the link click on use this template.
+    - Select Create New Repository
+    - Choose a great name
+    - Select public or private, your choice.
+    - Click on Create Repository.
+- Default image was made with Canva (https://www.canva.com/)
+- Diagram was made with LucidArt (https://lucid.app/)
+- Some of the code written here followed the moments walkthrough for example the User and Profile chain.
+- The set up for authorizations and tokens is fully taken from Moments.
+- Also thanks for the CI Tutoring team and Mentor for helping when some issues arised and for the Feedbacks provided.
