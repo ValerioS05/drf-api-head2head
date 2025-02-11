@@ -210,3 +210,66 @@ The /comments/ endpoint allows users to add, view, edit, and delete comments on 
   - Comments are automatically associated with the user.
   - The created_at field uses natural time formatting (ex:5 minutes ago).
   - Users cannot edit or delete comments they do not own(staff users can delete any comment.).
+
+#### Votes
+The /votes/ endpoint allows users to rate products by assigning a vote (1-5 stars). Each user can vote only once per product, and can update an existing vote.
+- **GET /votes/**
+  - Fetches a list of all votes.
+  - Accessible to all users, read only for non authenticated users.
+  - Returns id, owner, product, vote, and created_at.
+    |||
+    |--|--|
+    |![Vote GET](/images/readme_img/votget.png)|This is the votes returned from the GET endpoint, we can see the details of each comment with the addition of is_owner that specify the ownership of a vote.|
+- **GET /votes/{id}/**
+  - Fetches details of a specific vote by id.
+  - Returns a single vote object (See the picture above). 
+- **POST /votes/**
+  - Creates or updates a vote for a product.
+  - Only authenticated users can vote.
+  - Users can vote only once per product. If a vote already exists, it will be updated.
+    |||
+    |--|--|
+    |![Vote POST](/images/readme_img/votpost.png)|Simple form to post a vote requiring the Owner the Product and the value.(To note the value can be only 1-5.).|
+- **PUT /votes/{id}/**
+  - Updates an existing vote.
+  - Only the vote owner can update.
+    |||
+    |--|--|
+    |![Vote PUT](/images/readme_img/votput.png)|As the previous picture we have a form we the data is already prepopulated and giving the chance to update the value of the vote.|
+- **DELETE /votes/{id}/**
+  - Deletes a specific vote.
+  - Only the vote owner can delete their vote.
+    |||
+    |--|--|
+    |![Vote DELETE](/images/readme_img/votdel.png)|Returns a feedback of successfull deletion and the data are destroyed.|
+- **Notes**
+  - Users can only vote once per product (vote updates are allowed).
+  - Votes are restricted to a 1-5 range and not negatives are allowed.
+  - Unauthenticated users can view votes but cannot create or modify them.
+  - The created_at field is formatted in natural time (ex: 5 minutes ago).
+#### Comparisons
+The /comparisons/ endpoint allows users to compare exactly two products. Users can create, view, update, and delete comparisons, but only the owner of a comparison can modify or delete it.
+- **GET /comparisons/** and **/comparisons/{id}/**
+  - Fetches a list of all comparisons and fetches a comparison by id.
+  - Only authenticated users can create comparisons, but all users can view them.
+  - Includes comparison id, owner, products, and created_at.
+    |||
+    |--|--|
+    |![Comparison GET](/images/readme_img/compget.png)|In here we have a single comparison object it returns an id with the owner and ownership. The products are inside and array of ids to end with the created_at.|
+- **POST /comparisons/**
+  - Allows authenticated users to create a comparison.
+  - Must include exactly two different products.
+    |||
+    |--|--|
+    |![Comparison POST](/images/readme_img/comppost.png)|Adding a comparison requires 2 products and this is a must. Plus the owner. The created at is added automatically to it.Selecting the same product is not allowed.|
+- **PUT /comparisons/{id}/**
+  - Allows the owner to update the comparison.
+  - Must contain exactly two different products (same as the creation of a comparison.).
+  - Refer to the above picture for the form, the only difference is that the data is already prepopulated.
+- **DELETE /comparisons/{id}/**
+  - Allows the owner to delete a comparison.
+  - Requires authentication.
+    |||
+    |--|--|
+    |![Comparison POST](/images/readme_img/compdel.png)|In this example we have the successfull deletion of 26 comparisons(26 were added due to the submit button still available after submission in the client side that has been fixed.)|
+  
