@@ -10,6 +10,9 @@
     - [Votes](#votes)
     - [Comparisons](#comparisons)
     - [Serializers and Views](#serializers-and-views)
+- [Back To Main Page](#back-to-main-page)
+- [Go to Testing](#go-to-testing)
+
 ### Categories
 The /categories/ endpoint allows to manage categories for the products. Categories helps organize products into specific groups.
   - **GET**
@@ -258,3 +261,9 @@ The /comparisons/ endpoint allows users to compare exactly two products. Users c
     |--|--|
     |![Generic Views](/images/readme_img/views.png)|In Here we can see an sample of the code used to achieve generic views where the requests are automatically handled. We can also see the use of the backend filters (Search,Order). [Check the Generic Views](https://docs.djangoproject.com/en/5.1/topics/class-based-views/generic-display/)|
     |![Serializers](/images/readme_img/serializers.png)|In here we have a sample code of the Serializers used. The serializers in this project handle most of the validation and errors handling.[Check out the Serializers](https://www.django-rest-framework.org/api-guide/serializers/)|
+
+# Back To Main Page
+[Click here](/README.md) to get back.
+
+# Go to Testing
+[Click here](/testing.md) to go to the Testing Section.

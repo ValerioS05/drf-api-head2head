@@ -8,8 +8,10 @@
     - [Auto test on Comparisons](#auto-test-on-comparisons)
     - [Auto test showcase](#auto-test-showcase)
   - [More testing](#more-testing)
+- [Back To Main Page](#back-to-main-page)
+- [Endpoints section](#endpoints-section)
 
-[Back to main page](/README.md)  
+ 
 ## Manual Testing
 
 ||||
@@ -128,3 +130,9 @@
     |Votes Folder files.|Passed without issues.|
     |drf_api_head2head Folder files|Passed without issues.|
     |![Python Linter](/images/readme_img/linter.png)|In here an example of how to use the linter. Paste the full code over and the Linter will display any issue on the right side of the page. Follow this link to check it out. ([Link to Linter](https://pep8ci.herokuapp.com/)) |
+
+# Back To Main Page
+[Click here](/README.md) to get back. 
+
+# Endpoints section
+[Click here](/endpoints.md) to go to the Endpoints section.

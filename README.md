@@ -16,6 +16,7 @@ This is the readme for the **Head2Head** react application.
 - [DRF-API-HEAD2HEAD Readme](#drf-api-head2head-readme)
   - [Goal of the API](#goal-of-the-api)
   - [Readme Map:](#readme-map)
+  - [Separate sections](#separate-sections)
   - [Design of the database](#design-of-the-database)
     - [Overview](#overview)
     - [Features](#features)
@@ -29,7 +30,12 @@ This is the readme for the **Head2Head** react application.
   - [Languages](#languages)
   - [Bugs and fixes](#bugs-and-fixes)
   - [Credits](#credits)
- 
+
+## Separate sections
+- Sections for the readme were made to help on the reading.  
+[Endpoint](/endpoints.md) Section.  
+[Testing](/testing.md) Section.  
+
 ## Design of the database
 
 ### Overview
