@@ -272,4 +272,66 @@ The /comparisons/ endpoint allows users to compare exactly two products. Users c
     |||
     |--|--|
     |![Comparison POST](/images/readme_img/compdel.png)|In this example we have the successfull deletion of 26 comparisons(26 were added due to the submit button still available after submission in the client side that has been fixed.)|
-  
+
+### Dependencies
+- asgiref=3.8.1
+  - A Python package required for Django's support of asynchronous views and middleware.
+  - [Asgi](https://asgi.readthedocs.io/en/latest/)
+- cloudinary==1.41.0
+  - Cloudinary provides cloud-based media management used to integrate Cloudinary with Django.
+  - [Cloudinary](https://cloudinary.com/documentation)
+- dj-database-url==0.5.0
+  - A utility that helps configure Django database settings from a URL. Used in production environment (Heroku) to configure database connection via URL.
+  - [dj-database](https://github.com/jazzband/dj-database-url)
+- dj-rest-auth==2.1.9
+  - A Django package used for handling authentication in Django REST Framework. It simplifies the implementation of login, registration, and token authentication.
+  - [dj-rest-auth](https://dj-rest-auth.readthedocs.io/en/latest/)
+- Django==5.1.4
+  - The framework for Python used to build this application.
+  - [Django](https://docs.djangoproject.com/en/5.1/)
+- django-allauth==0.54.0
+  - A Django package for handling authentication.
+  - [Allauth](https://django-allauth.readthedocs.io/en/latest/)
+- django-cloudinary-storage==0.3.0
+  - A Django storage backend for Cloudinary. This package simplifies the integration of Cloudinary storage with Django applications.
+  - [Cloudinary-storage](https://pypi.org/project/django-cloudinary-storage/)
+
+- django-cors-headers==4.6.0
+  - A Django app for handling Cross Origin Resource Sharing (CORS). It allows your backend to specify which front end domains are permitted to interact with the api, preventing security issues when making requests from different domains.
+  - [Cors-headers](https://pypi.org/project/django-cors-headers/)
+- django-filter==24.3
+  - A package for adding filtering capabilities to Django REST Framework views.
+  - [Django-filter](https://django-filter.readthedocs.io/en/stable/guide/usage.html)
+- djangorestframework==3.15.2
+  - A toolkit for building Web APIs in Django. Provides tools for serialization, views, authentication, and more.
+  - [DRF](https://www.django-rest-framework.org/)
+- djangorestframework_simplejwt==5.4.0
+  - A Django REST Framework extension for handling JWT (Web Token) authentication.
+  - [Simple JWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/)
+- gunicorn==23.0.0
+ Gunicorn is used to serve Django applications in production environments. It's a server that interacts with Django’s WSGI interface.
+ [Gunicorn](https://docs.gunicorn.org/en/stable/)
+- oauthlib==3.2.2
+  - It's often used with requests-oauthlib to facilitate OAuth integration in Python applications.
+  - [OAuthlib](https://readthedocs.org/projects/oauthlib/downloads/pdf/latest/)
+pillow==11.0.0
+A image processing library for Python. Pillow is used to handle image upload.
+[Pillow](https://pillow.readthedocs.io/en/stable/releasenotes/11.0.0.html)
+- psycopg2==2.9.10
+  - A PostgreSQL adapter for Python. It allows your Django application to connect to and interact with a PostgreSQL database.
+  - [Psycopg2](https://www.psycopg.org/docs/install.html)
+- PyJWT==2.10.1
+  - A Python library used to work with Web Tokens (JWT). PyJWT is used for encoding and decoding JWTs,used in conjunction with Django simplejwt.
+  - [PyJWT](https://readthedocs.org/projects/pyjwt/)
+- python3-openid==3.2.0
+  - A library that support for python 3. Used for integrations with services like Google, Facebook, etc.(Note that in this app is not used even if setup.)
+  - [Openid](https://pypi.org/project/python3-openid/)
+- requests-oauthlib==2.0.0
+  - A library that adds OAuth support to the requests HTTP library. 
+  - [Requests OAuthlib](https://requests-oauthlib.readthedocs.io/en/latest/)
+- sqlparse==0.5.3
+  - sqlparse is a non-validating SQL parser for Python.
+  - [Sqlparse](https://sqlparse.readthedocs.io/en/stable/)
+- whitenoise==6.8.2
+  - A package that allows your Django application to serve static files.
+  - [Whitenoise](https://whitenoise.readthedocs.io/en/latest/index.html)
