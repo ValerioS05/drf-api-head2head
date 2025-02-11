@@ -24,6 +24,12 @@ This is the readme for the **Head2Head** react appliction.
   - Authentication:
     - JWT has been implemented to give the user security and session based authentication.
 
+### Plan
+|||
+|--|--|
+|![Models Diagram](/images/readme_img/diagram.png)|This is the initial diagram used to plan out the API. As we can see we have 5 different models. First model is the categories, created first to wrap around the main model that is the product. The product model is the center of those models directly connected to all the other models via PK. The third model planned was the profile that takes count to the default user model offered by the framework. The profile is connected to the Vote,Comment and Product model.|The vote and the Comment model are conneted to the Product as 1 to many where a product can have multiple votes and comments.Last but not least is the comparison model, the comparison models is connected to product as a many to many where a product can have multiple comparison and viceversa.
+  - **To note** is that this diagram was made before the development of the API and as so , some of the model may have been improved for data integrity / efficiency.
+
 ### API EndPoints
 #### Categories
 The /categories/ endpoint allows to manage categories for the products. Categories helps organize products into specific groups.
@@ -107,3 +113,100 @@ The /products/ endpoint allows the user to manage products. Each product belongs
       |||
       |--|--|
       |![Products PUT](/images/readme_img/prodel.png)|In here is the response that we get once a product is deleted and no data is anymore available.|
+
+#### Profiles
+The /profiles/ endpoint allows users to manage their profiles. Each profile is linked to a user and includes bio, location, and profile picture. Users can also mark products as favourites.
+The profile gets created automatically anytime a User is added to the database. To note is that when a user is created from the API the details of the profile are not fully set, and it will contain the profile_picture (default if not selected), the owner (User username), and the id.  
+To learn more about the User model you can follow this link --> [Django doc for the User model.](https://docs.djangoproject.com/en/5.1/ref/contrib/auth/)
+  - **GET /profiles/**
+    - Fetches all profiles.
+    - Accessible to all authenticated users or read only for non authenticated users.
+    - Returns a list of profiles with id, owner, bio, profile_picture, location, and favourites.
+      |||
+      |--|--|
+      |![Profiles GET](/images/readme_img/profget.png)|In here we see the returned profiles. We have all the properties returned from the profile model with the addition of the is_staff that is used to give authorization to certain users to perform a series of actions.| 
+  - **GET /profiles/{id}/**
+    - Fetches details of a specific profile by ID.
+    - Returns  a single profile with its details.
+      |||
+      |--|--|
+      |![Profiles GET](/images/readme_img/profgetid.png)|In here we have a single profile returned.|
+  - **POST /profiles/**
+    - Creates a new profile.
+    - Profiles are automatically created when a new user is registered.
+    - To note is that creating a profile from the admin panel is not an option due to restriction on the owner (User username) and it will return a message       explaining that a profile for that owner already exists.
+    - |||
+      |--|--|
+      |![Profiles POST](/images/readme_img/profpost.png).|We can see here an example of posting a profile. This restriction works perfectly to manage data integrity and clutter of datas.|
+     
+  - **PUT /profiles/{id}/**
+    - Updates a profile.
+    - Only the profile owner or staff users can edit profiles.
+      |||
+      |--|--|
+      |![Profiles PUT](/images/readme_img/profput.png)|As we can see here we have a form to change the profile with all its details. The image shows the current picture selected for this profile, under it a input to change the image to a new one.|
+  - **DELETE /profiles/{id}/**
+    - Deletes a profile.
+    - Only the profile owner or staff users can delete a profile.
+    - To mention is that this operation is handled only in the API admin panel and when a profile is deleted the user instance will still be preserved for data integrity.
+      |||
+      |--|--|
+      |![Profiles DELETE](/images/readme_img/profdel.png)|A message is returned by the panel upon successfull deletion.|
+  - **Filtering, Search, and Ordering**
+    -  Search:
+       -  You can search profiles by owner, bio, or location:
+       -  GET /profiles/?search=London
+    -  Ordering:
+       -  Profiles can be ordered by username or location:
+       -  GET /profiles/?ordering=owner__username
+    -  Filtering:
+       -  You can filter profiles by location or owner__username:
+       -  GET /profiles/?location=London
+    - **Notes**
+      - A profile is automatically created when a new user registers.
+      - The favourites field stores many to many relationships between profiles and products.
+
+#### Comments 
+The /comments/ endpoint allows users to add, view, edit, and delete comments on products. A comment is connected to a product and a user.
+- GET **/comments/**
+  - Fetches a list of all comments.
+  - Accessible to all, read only for non authenticated users.
+  - Returns a list of comments with id, product, owner, content, created_at, and profile_picture.
+    |||
+    |--|--|
+    |![Comments GET](/images/readme_img/comget.png)|In here we can see the comment objects fetched, each of the comments returns the details specified before, to note is that the profile_id profile_picture and created_at are set automatically upon creation.|
+- **GET /comments/{id}/**
+  - Fetches the details of a specific comment returning a single comment in the same format as the picture above.
+- **POST /comments/**
+  - Creates a new comment on a product.
+  - Only authenticated users can post comments.
+  - Requires a product and content.
+    |||
+    |--|--|
+    |![Comments POST](/images/readme_img/compost.png)|An example of a comment can be created from the admin panel requiring these elements.|
+- **PUT /comments/{id}/**
+  -  Updates the content of a comment.
+  -  Only the comment owner can edit.
+  -  Request require the content field.
+  -The form is the same as the POST with the only difference is that the fields are already populated with the existing data.
+- **DELETE /comments/{id}/**
+  - Deletes a specific comment.
+  - Only the comment owner/staff users can delete comments.
+    |||
+    |--|--|
+    |![Comments DELETE](/images/readme_img/comdel.png)|Upon successfull deletion a message is returned and data is destroyed.|
+- **Filtering, Search, and Ordering**
+  - Search:
+    - You can search comments by owner, content, or product name:
+    - GET /comments/?search=great
+  - Ordering:
+    - Comments can be ordered by username or created_at:
+    - GET /comments/?ordering=created_at
+  - Filtering:
+    - You can filter comments by owner or product id:
+    - GET /comments/?owner__username=name
+    - GET /comments/?product=5
+- **Notes**
+  - Comments are automatically associated with the user.
+  - The created_at field uses natural time formatting (ex:5 minutes ago).
+  - Users cannot edit or delete comments they do not own(staff users can delete any comment.).
