@@ -1,5 +1,5 @@
-# Head2Head API Readme
-This is the readme for the **Head2Head** react appliction.
+# DRF-API-HEAD2HEAD Readme
+This is the readme for the **Head2Head** react application.
 ## Goal of the API
 - This API has been built following the user stories created for the front end. I needed a good API that would let me handle the manipulation of datas for a comparison site. Firstly the though was about how the Comparison would be created
   - For a comparison I needed Products. So the Product model was planned.
@@ -13,12 +13,23 @@ This is the readme for the **Head2Head** react appliction.
   - Now the user stories for a common user are fulfilled. We have an API that let us manipulate products, comment and vote on them, group them by categories and finally compare them! (I also added favourites for more personalization but it was not implemented in the front end side.)
   - The goal for this project is achieved.
 ## Readme Map:
-  - [Head2Head API](#head2head-api-readme)
-  - [Overiew](#overview)
-  - [Plan](#plan)
-  - [Models](#models)
-  - [EndPoints](/endpoints.md)
-  - [Testing](/testing.md)
+- [DRF-API-HEAD2HEAD Readme](#drf-api-head2head-readme)
+  - [Goal of the API](#goal-of-the-api)
+  - [Readme Map:](#readme-map)
+  - [Design of the database](#design-of-the-database)
+    - [Overview](#overview)
+    - [Features](#features)
+    - [Plan](#plan)
+    - [Models](#models)
+    - [Relationships Between Models:](#relationships-between-models)
+      - [How They Work Together:](#how-they-work-together)
+      - [CRUD](#crud)
+  - [Deployment](#deployment)
+  - [Dependencies (Requirements.txt) and technologies](#dependencies-requirementstxt-and-technologies)
+  - [Languages](#languages)
+  - [Bugs and fixes](#bugs-and-fixes)
+  - [Credits](#credits)
+ 
 ## Design of the database
 
 ### Overview
@@ -41,12 +52,12 @@ This is the readme for the **Head2Head** react appliction.
   - Authentication:
     - JWT has been implemented to give the user security and session based authentication.
 
-## Plan
+### Plan
 |||
 |--|--|
 |![Models Diagram](/images/readme_img/diagram.png)|This is the initial diagram used to plan out the API. As we can see we have 5 different models. First model is the categories, created first to wrap around the main model that is the product. The product model is the center of those models directly connected to all the other models via PK. The third model planned was the profile that takes count to the default user model offered by the framework. The profile is connected to the Vote,Comment and Product model.|The vote and the Comment model are conneted to the Product as 1 to many where a product can have multiple votes and comments.Last but not least is the comparison model, the comparison models is connected to product as a many to many where a product can have multiple comparison and viceversa.
   - **To note** is that this diagram was made before the development of the API and as so , some of the model may have been improved for data integrity / efficiency.
-## Models
+### Models
 
 1. Category Model
    - The Category model represents a category under which products can be wrapped. It includes:
@@ -280,11 +291,11 @@ This is the readme for the **Head2Head** react appliction.
 - **React extention for the Browser**
   - It could be a simple extentions for the browser but the use of this extention helped the development of this project very much.
  
-#### Languages
+## Languages
   - Python
     - [Python Doc](https://www.python.org/doc/)
 
-#### Bugs and fixes
+## Bugs and fixes
 - One of the most problematic bugs was the implementation of the authorization. When trying to access the Production site from Heroku the authorization was never given.
   - Solution: The issue has been fixed by changing the setup in the main folder and the env.py variables matching the actual config vars in heroku.
 - Issue when trying to give image size restriction with cloudinary.
@@ -300,7 +311,7 @@ This is the readme for the **Head2Head** react appliction.
 
 
 
-#### Credits
+## Credits
 - The Repository was generated using the Code-Institute-Org/ci-full-template
   - [Template](https://github.com/Code-Institute-Org/ci-full-template)
     - Open the link click on use this template.
