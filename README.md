@@ -1,5 +1,5 @@
 # DRF-API-HEAD2HEAD Readme
-This is the readme for the **Head2Head** react application.
+This is the readme for the **API Head2Head** react application.
 ## Goal of the API
 - This API has been built following the user stories created for the front end. I needed a good API that would let me handle the manipulation of datas for a comparison site. Firstly the though was about how the Comparison would be created
   - For a comparison I needed Products. So the Product model was planned.
